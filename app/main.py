@@ -10,7 +10,7 @@ from fastapi.staticfiles import StaticFiles
 from fastapi.responses import FileResponse
 from app.api_routes import router as api_router
 
-BASE_DIR = Path(__file__).resolve().parent.parent
+BASE_DIR = Path(__file__).resolve().parent.parent  # ✅ यह सही है (app/ का parent = /app)
 STATIC_DIR = BASE_DIR / "static"
 
 app = FastAPI(
