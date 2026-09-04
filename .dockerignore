@@ -1,0 +1,15 @@
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+.git
+.gitignore
+*.db
+tunnel.log
+*.log
+.env
+.env.example
+README.md
+test_engine.py
+run.ps1
+start_public_tunnel.bat
