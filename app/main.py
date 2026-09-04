@@ -10,8 +10,13 @@ from fastapi.staticfiles import StaticFiles
 from fastapi.responses import FileResponse
 from app.api_routes import router as api_router
 
-BASE_DIR = Path(__file__).resolve().parent.parent  # ✅ यह सही है (app/ का parent = /app)
+BASE_DIR = Path(__file__).resolve().parent.parent
 STATIC_DIR = BASE_DIR / "static"
+
+# Resolve static directory (supports both ./static and root if flattened)
+STATIC_DIR = BASE_DIR / "static"
+if not STATIC_DIR.exists():
+    STATIC_DIR = BASE_DIR
 
 app = FastAPI(
     title="SIH26044 — Skill, Internship & Placement Portal",
@@ -32,7 +37,8 @@ app.add_middleware(
 app.include_router(api_router)
 
 # Mount static directory
-app.mount("/static", StaticFiles(directory=str(STATIC_DIR)), name="static")
+if STATIC_DIR.exists():
+    app.mount("/static", StaticFiles(directory=str(STATIC_DIR)), name="static")
 
 @app.get("/api/health")
 def health_check():
@@ -48,6 +54,8 @@ def health_check():
 def serve_index():
     """Serve single-page application dashboard."""
     index_file = STATIC_DIR / "index.html"
+    if not index_file.exists():
+        index_file = BASE_DIR / "index.html"
     return FileResponse(index_file)
 
 if __name__ == "__main__":
